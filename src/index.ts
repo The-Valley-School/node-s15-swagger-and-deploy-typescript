@@ -1,23 +1,24 @@
 import { userRouter } from "./routes/user.routes";
 import { carRouter } from "./routes/car.routes";
 import { brandRouter } from "./routes/brand.routes";
-
 import { type Request, type Response, type NextFunction, type ErrorRequestHandler } from "express";
-
 import express from "express";
 import cors from "cors";
 import { mongoConnect } from "./databases/mongo-db";
-import { sqlConnect } from "./databases/sql-db";
 import { languagesRouter } from "./routes/languages.routes";
-import { AppDataSource } from "./databases/typeorm-datasource";
+// import { AppDataSource } from "./databases/typeorm-datasource";
+// import { sqlConnect } from "./databases/sql-db";
 import { playerRouter } from "./routes/player.routes";
 import { teamRouter } from "./routes/team.routes";
+import { swaggerOptions } from "./swagger-options";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const main = async (): Promise<void> => {
   // Conexión a la BBDD
   const mongoDatabase = await mongoConnect();
-  const sqlDatabase = await sqlConnect();
-  const datasource = await AppDataSource.initialize();
+  // const sqlDatabase = await sqlConnect();
+  // const datasource = await AppDataSource.initialize();
 
   // Configuración del server
   const PORT = 3000;
@@ -30,15 +31,27 @@ const main = async (): Promise<void> => {
     })
   );
 
+  // Swagger
+  const specs = swaggerJsDoc(swaggerOptions);
+  app.use(
+    "/api-docs",
+    swaggerUiExpress.serve,
+    swaggerUiExpress.setup(specs)
+  );
+
   // Rutas
   const router = express.Router();
   router.get("/", (req: Request, res: Response) => {
+    // res.send(`
+    //   <h3>Esta es la RAIZ de nuestra API.</h3>
+    //   <p>Estamos usando la BBDD Mongo de ${mongoDatabase?.connection?.name as string}</p>
+    //   <p>Estamos usando la BBDD SQL ${sqlDatabase?.config?.database as string} del host ${sqlDatabase?.config?.host as string}</p>
+    //   <p>Estamos usando TypeORM con la BBDD: ${datasource.options.database as string}</p>
+    // `);
     res.send(`
       <h3>Esta es la RAIZ de nuestra API.</h3>
       <p>Estamos usando la BBDD Mongo de ${mongoDatabase?.connection?.name as string}</p>
-      <p>Estamos usando la BBDD SQL ${sqlDatabase?.config?.database as string} del host ${sqlDatabase?.config?.host as string}</p>
-      <p>Estamos usando TypeORM con la BBDD: ${datasource.options.database as string}</p>
-    `);
+  `);
   });
   router.get("*", (req: Request, res: Response) => {
     res.status(404).send("Lo sentimos :( No hemos encontrado la página solicitada.");
