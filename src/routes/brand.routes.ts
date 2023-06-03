@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Brand
+ *   description: The brands managing API
+ */
+
 import express, { type NextFunction, type Response, type Request } from "express";
 import fs from "fs";
 import multer from "multer";
@@ -8,7 +15,27 @@ const upload = multer({ dest: "public" });
 
 export const brandRouter = express.Router();
 
-// CRUD: READ
+/**
+ * @swagger
+ * /brand:
+ *   get:
+ *     summary: Lists all the brands
+ *     tags: [Brand]
+ *     responses:
+ *       200:
+ *         description: The list of the brands
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Brand'
+ *                 pagination:
+ *                   $ref: '#/components/schemas/Pagination'
+ */
 brandRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Asi leemos query params
@@ -22,9 +49,11 @@ brandRouter.get("/", async (req: Request, res: Response, next: NextFunction) => 
     const totalElements = await Brand.countDocuments();
 
     const response = {
-      totalItems: totalElements,
-      totalPages: Math.ceil(totalElements / limit),
-      currentPage: page,
+      pagination: {
+        totalItems: totalElements,
+        totalPages: Math.ceil(totalElements / limit),
+        currentPage: page,
+      },
       data: brands,
     };
 
@@ -34,7 +63,27 @@ brandRouter.get("/", async (req: Request, res: Response, next: NextFunction) => 
   }
 });
 
-// CRUD: READ
+/**
+ * @swagger
+ * /brand/{id}:
+ *   get:
+ *     summary: Get a brand by ID
+ *     tags: [Brand]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The brand ID
+ *     responses:
+ *       200:
+ *         description: The brand info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Brand'
+ */
 brandRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
