@@ -1,3 +1,35 @@
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Car:
+ *      type: object
+ *      required:
+ *        - brand
+ *        - model
+ *        - year
+ *        - price
+ *      properties:
+ *        id:
+ *          type: string
+ *          description: The auto-generated id of the car
+ *        brand:
+ *          type: string
+ *          description: The brand of the car
+ *        model:
+ *          type: string
+ *          description: The model of the car
+ *        plate:
+ *          type: string
+ *          description: The plate of the car
+ *        power:
+ *          type: number
+ *          description: The horsepower of this car
+ *        owner:
+ *          type: string
+ *          description: The owner ID of this car
+ */
+
 import mongoose, { type ObjectId } from "mongoose";
 const Schema = mongoose.Schema;
 

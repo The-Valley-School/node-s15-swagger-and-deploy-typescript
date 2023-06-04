@@ -98,7 +98,29 @@ brandRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) 
   }
 });
 
-// CRUD: Operación custom, no es CRUD
+/**
+ * @swagger
+ * /brand/name/{name}:
+ *   get:
+ *     summary: Get a brand by name
+ *     tags: [Brand]
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The brand name
+ *     responses:
+ *       200:
+ *         description: The brand info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Brand'
+ *       404:
+ *         description: The brand was not found
+ */
 brandRouter.get("/name/:name", async (req: Request, res: Response, next: NextFunction) => {
   const brandName = req.params.name;
 
@@ -114,7 +136,28 @@ brandRouter.get("/name/:name", async (req: Request, res: Response, next: NextFun
   }
 });
 
-// CRUD: CREATE
+/**
+ * @swagger
+ * /brand:
+ *   post:
+ *     summary: Create a new brand
+ *     tags: [Brand]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Brand'
+ *     responses:
+ *       201:
+ *         description: The brand was created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Brand'
+ *       400:
+ *         description: The request body is incorrect or missing
+ */
 brandRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const brand = new Brand(req.body);
@@ -125,7 +168,25 @@ brandRouter.post("/", async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
-// CRUD: DELETE
+/**
+ * @swagger
+ * /brand/{id}:
+ *   delete:
+ *     summary: Deletes a brand
+ *     tags: [Brand]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The brand ID
+ *     responses:
+ *       200:
+ *         description: The brand was deleted successfully
+ *       404:
+ *         description: The brand was not found
+ */
 brandRouter.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
@@ -140,7 +201,37 @@ brandRouter.delete("/:id", async (req: Request, res: Response, next: NextFunctio
   }
 });
 
-// CRUD: UPDATE
+/**
+ * @swagger
+ * /brand/{id}:
+ *   put:
+ *     summary: Update a brand
+ *     tags: [Brand]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The brand ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Brand'
+ *     responses:
+ *       200:
+ *         description: The brand was updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Brand'
+ *       400:
+ *         description: The request body is incorrect or missing
+ *       404:
+ *         description: The brand was not found
+ */
 brandRouter.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
@@ -155,6 +246,29 @@ brandRouter.put("/:id", async (req: Request, res: Response, next: NextFunction) 
   }
 });
 
+/**
+ * @swagger
+ * /brand/logo-upload:
+ *   post:
+ *     summary: Upload a logo for a brand
+ *     tags: [Brand]
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: logo
+ *         type: file
+ *         description: The file to upload.
+ *       - in: formData
+ *         name: brandId
+ *         type: string
+ *         description: The id of the brand
+ *     responses:
+ *       200:
+ *         description: The logo was uploaded successfully
+ *       404:
+ *         description: The brand was not found
+ */
 brandRouter.post("/logo-upload", upload.single("logo"), async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Renombrado de la imagen

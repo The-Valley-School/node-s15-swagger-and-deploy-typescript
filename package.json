@@ -10,6 +10,7 @@
     "seed:team-and-player": "ts-node-dev ./src/seeds/team-and-player.seed.ts --ignore-watch",
     "start:pro": "npm run build && node ./dist/index.js",
     "build": "tsc",
+    "build:swagger-json": "ts-node-dev ./src/utils/generate-swagger-json.ts --ingore-watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
