@@ -1,5 +1,3 @@
-# Sesión 15 - Swagger y desplegar en Render
-
 # VIDEO 01 - Intro a Swagger
 
 Swagger es una suite de herramientas de código abierto que ayudan a desarrolladores a diseñar, construir, documentar y consumir servicios web RESTful. Estas herramientas incluyen el soporte para la documentación de API, pruebas de interfaz de usuario, pruebas de generación de código, etc.
